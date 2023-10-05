@@ -42,6 +42,13 @@ function power_matrix($n){
     }
     return $matrix;
 }
+
+// Verifique se o tamanho da tabela foi enviado pelo formulário
+if (isset($_POST['tamanho'])) {
+    $n = intval($_POST['tamanho']);
+    $m = power_matrix($n);
+    echo create_table($m);
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -52,14 +59,24 @@ function power_matrix($n){
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
   <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 </head>
-<body>
+<body> 
 <div class="container">
   <h1>Tabela de potências</h1>
-  <?php
-    $n = 10;
-    $m = power_matrix($n);
-    echo create_table($m);
-  ?>
+  <form method="post">
+    <input type="text" name="tamanho" placeholder="Digite o tamanho">
+    <button type="submit">Enviar</button>
+  </form>
 </div>
+  <script>
+  // Impedir a recarga da página quando o formulário é enviado
+  document.getElementById('powerForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+    var tamanho = document.getElementById('tamanho').value;
+    // Faça uma solicitação AJAX para atualizar a tabela
+    $.post('', { tamanho: tamanho }, function(data) {
+      $('#tabela').html(data);
+    });
+  });
+</script>
 </body>
 </html>
